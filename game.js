@@ -37,6 +37,34 @@ function checkResult(player, ai) {
     }
 }
 
+//Publikacja wyniku
+function publishResult(player, ai, result) {
+    document.querySelector('[data-summary="your-choice"]').textContent = player
+    document.querySelector('[data-summary="ai-choice"]').textContent = ai
+    document.querySelector('p.numbers span').textContent = ++gameSummary.numbers
+
+    if (result === 'win') {
+        document.querySelector('p.wins span').textContent = ++gameSummary.wins
+        document.querySelector('[data-summary="who-win"]').textContent = 'Wygrałeś!'
+        document.querySelector('[data-summary="who-win"]').style.color = 'green'
+    } else if (result === 'loss') {
+        document.querySelector('p.losses span').textContent = ++gameSummary.losses
+        document.querySelector('[data-summary="who-win"]').textContent = 'Komputer wygrał :C'
+        document.querySelector('[data-summary="who-win"]').style.color = 'red'
+    } else {
+        document.querySelector('p.draws span').textContent = ++gameSummary.draws
+        document.querySelector('[data-summary="who-win"]').textContent = 'Remis :|'
+        document.querySelector('[data-summary="who-win"]').style.color = 'gray'
+    }
+}
+
+function endGame() {
+    document.querySelector(`[data-option="${game.playerHand}"]`).style.boxShadow = ''
+    game.playerHand = ''
+    game.aiHand = ''
+}
+
+
 // funkcja sterująca
 function startGame() {
     if (!game.playerHand) {
@@ -44,28 +72,11 @@ function startGame() {
     }
     game.aiHand = aiChoice()
     const gameResult = checkResult(game.playerHand, game.aiHand)
+    publishResult(game.playerHand, game.aiHand, gameResult)
+    endGame()
 }
 
-hands.forEach(hand => hand.addEventListener('click', handSelection))
+hands.forEach(hand => hand.addEventListener('click', handSelection));
 
-document.querySelector('.start').addEventListener('click', startGame)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.querySelector('.start').addEventListener('click', startGame);
 
